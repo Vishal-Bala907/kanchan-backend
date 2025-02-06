@@ -3,10 +3,45 @@ const dotenv = require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-const testRoutes = require("./routes/testRoutes");
+// const testRoutes = require("./routes/testRoutes");
 
-app.use("/home", testRoutes);
+// route imports
+const authRoutes = require("./routes/auth");
+
+// handle CORS here
+const DEV_ORIGIN = process.env.DEV_ORIGIN;
+const PROD_ORIGIN = process.env.PROD_ORIGIN;
+const allowedOrigins = [DEV_ORIGIN, PROD_ORIGIN];
+const corsOption = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS Error : Origin ${origin} is not allowed`));
+    }
+  },
+  methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+// add cors to the app
+app.use(cors(corsOption));
+// use body parser
+/*
+body-parser is a middleware for Express.js used to parse incoming request bodies before reaching the route handlers. It helps extract data from POST and PUT requests, making it available in req.body.
+*/
+app.use(express.json());
+
+// route registration
+app.use("/api/v1/auth", authRoutes);
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+// app.use("/home", testRoutes);
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is live @ http://localhost/${process.env.PORT}`);
+  console.log(`Server is live @ http://localhost:${process.env.PORT}`);
 });
