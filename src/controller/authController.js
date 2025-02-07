@@ -29,6 +29,7 @@ exports.signUpController = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      role: "USER",
     });
     const userNew = await newUser.save();
     res

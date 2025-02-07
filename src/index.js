@@ -7,6 +7,7 @@ const app = express();
 
 // route imports
 const authRoutes = require("./routes/auth");
+const adminCourseRoute = require("./routes/courses");
 
 // handle CORS here
 const DEV_ORIGIN = process.env.DEV_ORIGIN;
@@ -35,6 +36,9 @@ app.use(express.json());
 
 // route registration
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/admin", adminCourseRoute);
+// Serve uploaded images statically
+app.use("/uploads", express.static("uploads"));
 
 mongoose
   .connect(process.env.MONGO_URI)

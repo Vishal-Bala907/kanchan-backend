@@ -1,18 +1,21 @@
 const mongoose = require("mongoose");
 
-const soldCourses = new mongoose.Schema({
-  date: { type: Date, default: Date.now }, // Store dates properly
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference User model
+// Schema for Sold Courses
+const soldCoursesSchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now }, // Auto-stores the purchase date
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User model
 });
 
-const userSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: true },
-  shortDec: { type: String, required: true, index: true }, // Index for optimized searches
-  longDec: { type: String, required: true, index: true }, // Index for optimized searches
-  image: { type: String, required: true },
-  price: { type: Number, required: true },
-  offerPrice: { type: Number, required: true },
-  sold: [soldCourses], // Embedded sub-document
+// Schema for Courses
+const courseSchema = new mongoose.Schema({
+  title: { type: String, required: true, unique: true }, // Course title must be unique
+  shortDec: { type: String, required: true, index: true }, // Optimized for search
+  longDec: { type: String, required: true, index: true }, // Optimized for search
+  image: { type: String, required: true }, // Store image URL
+  price: { type: Number, required: true }, // Original price
+  offerPrice: { type: Number, required: true }, // Discounted price
+  sold: [soldCoursesSchema], // Embedded sub-document for tracking sales
 });
 
-module.exports = mongoose.model("User", userSchema);
+// Export as 'Course' model
+module.exports = mongoose.model("Course", courseSchema);

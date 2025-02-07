@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, index: true }, // Index for optimized searches
   phone: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
+  role: { type: String, required: true },
   courses: [userPurchasedCourses], // Embedded sub-document
 });
 
