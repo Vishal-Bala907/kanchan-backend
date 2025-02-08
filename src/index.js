@@ -8,6 +8,9 @@ const app = express();
 // route imports
 const authRoutes = require("./routes/auth");
 const adminCourseRoute = require("./routes/courses");
+const blogRoute = require("./routes/blogRoute");
+const paymentRoute = require("./routes/payment");
+const Razorpay = require("razorpay");
 
 // handle CORS here
 const DEV_ORIGIN = process.env.DEV_ORIGIN;
@@ -34,9 +37,13 @@ body-parser is a middleware for Express.js used to parse incoming request bodies
 */
 app.use(express.json());
 
+// Initialize Razorpay instance
+
 // route registration
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminCourseRoute);
+app.use("/api/v1/blog", blogRoute);
+app.use("/api/v1/pay", paymentRoute);
 // Serve uploaded images statically
 app.use("/uploads", express.static("uploads"));
 

@@ -52,5 +52,18 @@ router.get("/all/course", async (req, res) => {
     res.status(500).json({ error: "Failed to get course" });
   }
 });
+// GET Route: Upload Course
+router.get("/course/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const courses = await Course.findById(id);
+    res.status(201).json({ success: true, course: courses });
+  } catch (error) {
+    console.error("Error uploading course:", error);
+    res.status(500).json({ error: "Failed to get course" });
+  }
+});
 
 module.exports = router;
