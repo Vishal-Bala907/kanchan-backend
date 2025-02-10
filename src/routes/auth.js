@@ -17,6 +17,9 @@ route.post(
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
+    body("name")
+      .isLength({ min: 6 })
+      .withMessage("name must be at least 6 characters long"),
   ],
   signUpController
 );

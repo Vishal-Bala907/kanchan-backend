@@ -6,10 +6,17 @@ const PaymentDetailsSchema = new mongoose.Schema(
     orderId: { type: String, required: true },
     signature: { type: String, required: true },
     amount: { type: Number, required: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    courseId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
     timestamp: { type: Number, default: Date.now },
-    reqId: { type: Number, required: true },
   },
   { timestamps: true }
 );

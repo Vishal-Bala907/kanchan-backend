@@ -13,7 +13,7 @@ exports.signUpController = async (req, res) => {
     return res.status(400).json({ message: [errors.array()] });
   }
 
-  const { email, phone, password } = req.body;
+  const { email, phone, password, name } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -29,6 +29,7 @@ exports.signUpController = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      name,
       role: "USER",
     });
     const userNew = await newUser.save();
