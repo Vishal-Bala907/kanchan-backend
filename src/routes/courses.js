@@ -2,6 +2,9 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Course = require("../models/course");
+const fs = require("fs");
+// const path = require("path");
+
 // const course = require("../models/course");
 
 const router = express.Router();
@@ -63,6 +66,67 @@ router.get("/course/:id", async (req, res) => {
   } catch (error) {
     console.error("Error uploading course:", error);
     res.status(500).json({ error: "Failed to get course" });
+  }
+});
+
+// Update Course API
+router.put("/update/:courseId", upload.single("image"), async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { title, shortDec, longDec, price, offerPrice } = req.body;
+    let updatedFields = { title, shortDec, longDec, price, offerPrice };
+
+    // If a new image is uploaded, update the image field
+    if (req.file) {
+      updatedFields.image = `/uploads/${req.file.filename}`;
+    }
+
+    // Find and update course
+    const updatedCourse = await Course.findByIdAndUpdate(
+      courseId,
+      updatedFields,
+      { new: true }
+    );
+
+    if (!updatedCourse) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Course updated successfully", course: updatedCourse });
+  } catch (error) {
+    console.error("Error updating course:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Delete Course API
+router.delete("/delete/:courseId", async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    // Find the course by ID
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    // Remove image file if it exists
+    if (course.image) {
+      const imagePath = path.join(__dirname, "..", course.image); // Convert to absolute path
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Delete the file
+      }
+    }
+
+    // Delete the course from the database
+    await Course.findByIdAndDelete(courseId);
+
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

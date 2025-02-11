@@ -82,6 +82,8 @@ exports.verifyPayment = async (req, res) => {
           userId,
           courseId,
         });
+        // console.log("amount " + amount);
+
         await payment.save();
 
         console.log("Payment verified for course:", course.title);
