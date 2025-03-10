@@ -10,6 +10,8 @@ const authRoutes = require("./routes/auth");
 const adminCourseRoute = require("./routes/courses");
 const blogRoute = require("./routes/blogRoute");
 const paymentRoute = require("./routes/payment");
+const courseReview = require("./routes/courseReview");
+const queryRoute = require("./routes/queryRoutes");
 const Razorpay = require("razorpay");
 
 // handle CORS here
@@ -44,6 +46,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminCourseRoute);
 app.use("/api/v1/blog", blogRoute);
 app.use("/api/v1/pay", paymentRoute);
+app.use("/api/v1/review/course", courseReview);
+app.use("/api/v1/query", queryRoute);
 // Serve uploaded images statically
 app.use("/uploads", express.static("uploads"));
 

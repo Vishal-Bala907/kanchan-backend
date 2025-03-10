@@ -1,11 +1,5 @@
 const mongoose = require("mongoose");
 
-// Schema for Sold Courses
-// const soldCoursesSchema = new mongoose.Schema({
-//   date: { type: Date, default: Date.now }, // Auto-stores the purchase date
-//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User model
-// });
-
 // Schema for Courses
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true }, // Course title must be unique
@@ -16,6 +10,13 @@ const courseSchema = new mongoose.Schema({
   offerPrice: { type: Number, required: true }, // Discounted price
   sold: { type: Number, default: 0 },
   income: { type: Number, default: 0 },
+  ratings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "CourseReview",
+    },
+  ],
 });
 
 // Export as 'Course' model

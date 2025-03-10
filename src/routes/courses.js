@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const Course = require("../models/course");
 const fs = require("fs");
+const User = require("../models/User");
 // const path = require("path");
 
 // const course = require("../models/course");
@@ -48,23 +49,34 @@ router.post("/add/course", upload.single("image"), async (req, res) => {
 // GET Route: Upload Course
 router.get("/all/course", async (req, res) => {
   try {
-    const courses = await Course.find();
+    const courses = await Course.find().populate("ratings");
     res.status(201).json({ success: true, course: courses });
   } catch (error) {
     console.error("Error uploading course:", error);
     res.status(500).json({ error: "Failed to get course" });
   }
 });
-// GET Route: Upload Course
+// GET Route:
 router.get("/course/:id", async (req, res) => {
   const { id } = req.params;
   console.log(id);
 
   try {
-    const courses = await Course.findById(id);
-    res.status(201).json({ success: true, course: courses });
+    const courses = await Course.findById(id).populate({
+      path: "ratings",
+      populate: {
+        path: "user", // This will populate the 'user' field inside each rating
+        model: "User", // Ensure the model name matches your User schema
+      },
+    });
+
+    if (!courses) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    res.status(200).json({ success: true, course: courses });
   } catch (error) {
-    console.error("Error uploading course:", error);
+    console.error("Error fetching course:", error);
     res.status(500).json({ error: "Failed to get course" });
   }
 });
@@ -120,6 +132,9 @@ router.delete("/delete/:courseId", async (req, res) => {
       }
     }
 
+    // delete the related reviews from the course schema
+
+    await CourseReview.deleteMany({ courseId: courseId });
     // Delete the course from the database
     await Course.findByIdAndDelete(courseId);
 
