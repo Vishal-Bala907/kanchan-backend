@@ -3,7 +3,6 @@ const dotenv = require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-// const testRoutes = require("./routes/testRoutes");
 
 // route imports
 const authRoutes = require("./routes/auth");
@@ -13,7 +12,8 @@ const paymentRoute = require("./routes/payment");
 const courseReview = require("./routes/courseReview");
 const queryRoute = require("./routes/queryRoutes");
 const bookingRoute = require("./routes/bookingRoute");
-const Razorpay = require("razorpay");
+const workshopRoutes = require("./routes/workshops"); // ✅ Import Workshop Routes
+const workshopReviewRoutes = require("./routes/workshopReview"); // ✅ Import Workshop Review Routes
 
 // handle CORS here
 const DEV_ORIGIN = process.env.DEV_ORIGIN;
@@ -34,15 +34,9 @@ const corsOption = {
 
 // add cors to the app
 app.use(cors(corsOption));
-// use body parser
-/*
-body-parser is a middleware for Express.js used to parse incoming request bodies before reaching the route handlers. It helps extract data from POST and PUT requests, making it available in req.body.
-*/
 app.use(express.json());
 
-// Initialize Razorpay instance
-
-// route registration
+// Route registration
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminCourseRoute);
 app.use("/api/v1/blog", blogRoute);
@@ -50,14 +44,17 @@ app.use("/api/v1/pay", paymentRoute);
 app.use("/api/v1/review/course", courseReview);
 app.use("/api/v1/query", queryRoute);
 app.use("/api/v1/booking", bookingRoute);
+app.use("/api/v1/workshops", workshopRoutes); // ✅ Register Workshop Routes
+app.use("/api/v1/review/workshop", workshopReviewRoutes); // ✅ Register Workshop Review Routes
+
 // Serve uploaded images statically
 app.use("/uploads", express.static("uploads"));
 
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
-// app.use("/home", testRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is live @ http://localhost:${process.env.PORT}`);
