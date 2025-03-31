@@ -13,6 +13,7 @@ const paymentRoute = require("./routes/payment");
 const courseReview = require("./routes/courseReview");
 const queryRoute = require("./routes/queryRoutes");
 const bookingRoute = require("./routes/bookingRoute");
+const videoRoute = require("./routes/videoRoutes");
 const Razorpay = require("razorpay");
 
 // handle CORS here
@@ -50,6 +51,7 @@ app.use("/api/v1/pay", paymentRoute);
 app.use("/api/v1/review/course", courseReview);
 app.use("/api/v1/query", queryRoute);
 app.use("/api/v1/booking", bookingRoute);
+app.use("/api/v1/video", videoRoute);
 // Serve uploaded images statically
 app.use("/uploads", express.static("uploads"));
 
