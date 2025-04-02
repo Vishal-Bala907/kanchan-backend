@@ -6,10 +6,11 @@ const workshopSchema = new mongoose.Schema({
   shortDec: { type: String, required: true, index: true }, // Optimized for search
   longDec: { type: String, required: true, index: true }, // Optimized for search
   image: { type: String, required: true }, // Store image URL
-  price: { type: Number, required: true }, // Original price
-  offerPrice: { type: Number, required: true }, // Discounted price
-  sold: { type: Number, default: 0 },
-  income: { type: Number, default: 0 },
+  WorkshopCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "WorkshopCategory",
+  },
   ratings: [
     {
       type: mongoose.Schema.Types.ObjectId,

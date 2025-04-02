@@ -1,4 +1,5 @@
-const Workshop = require("../models/workshop");
+// const Workshop = require("../models/Workshop");
+const workshop = require("../models/workshop");
 const WorkshopReview = require("../models/WorkshopReview");
 
 // Get all workshop reviews
@@ -37,7 +38,7 @@ exports.handlePostWorkshopReview = async (req, res) => {
 
     // Add review ID to workshop schema
     const reviewId = savedReview._id;
-    const workshop = await Workshop.findById(workshopId);
+    const workshop = await workshop.findById(workshopId);
     if (!workshop) {
       return res.status(404).json({ error: "Workshop not found" });
     }
