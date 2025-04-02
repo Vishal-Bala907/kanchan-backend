@@ -91,6 +91,14 @@ router.put("/update/:courseId", upload.single("image"), async (req, res) => {
     // If a new image is uploaded, update the image field
     if (req.file) {
       updatedFields.image = `/uploads/${req.file.filename}`;
+      // Remove image file if it exists
+      const course = await Course.findById(courseId);
+      if (course.image) {
+        const imagePath = path.join(__dirname, "../..", course.image);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath); // Delete the file
+        }
+      }
     }
 
     // Find and update course
@@ -126,7 +134,7 @@ router.delete("/delete/:courseId", async (req, res) => {
 
     // Remove image file if it exists
     if (course.image) {
-      const imagePath = path.join(__dirname, "..", course.image); // Convert to absolute path
+      const imagePath = path.join(__dirname, "../..", course.image);
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the file
       }

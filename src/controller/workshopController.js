@@ -67,7 +67,7 @@ exports.addWorkshop = async (req, res) => {
     // new workshop instance
     const newWorkshop = new workshop({
       title,
-      WorkshopCategory: category,
+      WorkshopCategory: categoryId,
       shortDec,
       longDec,
       image: `/uploads/${req.file.filename}`,
@@ -184,7 +184,9 @@ exports.deleteWorkshop = async (req, res) => {
     // also remove the workshop image
     // Remove image file if it exists
     if (exists.image) {
-      const imagePath = path.join(__dirname, "..", exists.image); // Convert to absolute path
+      const imagePath = path.join(__dirname, "../..", exists.image);
+      console.log(imagePath);
+
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the file
       }
@@ -218,7 +220,9 @@ exports.updateWorkshopImage = async (req, res) => {
 
     // ✅ Remove previous image if exists
     if (exists.image) {
-      const imagePath = path.join(__dirname, "..", exists.image); // Convert to absolute path
+      const imagePath = path.join(__dirname, "../..", exists.image);
+      console.log(imagePath);
+
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the file
       }
