@@ -16,6 +16,7 @@ const {
   getWorkshopByCategoryId,
   getWorkshopById,
   updateWorkshopImage,
+  updateWorksopCategoryName,
 } = require("../controller/workshopController");
 
 const router = express.Router();
@@ -33,6 +34,7 @@ const upload = multer({ storage });
 router.post("/add/category", addWorkshopCategory);
 router.get("/get/category", getAllWorkshopCategories);
 router.delete("/delete/category/:id", deleteWorkshopCategory);
+router.put("/update/category/:id", updateWorksopCategoryName);
 
 router.post("/add/workshop", upload.single("image"), addWorkshop);
 router.get("/get/workshops", getAllWorkshops);

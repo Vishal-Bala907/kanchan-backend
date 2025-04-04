@@ -15,10 +15,29 @@ exports.addWorkshopCategory = async (req, res) => {
 
     const newCategory = new WorkshopCategory({ categoryName: category });
     await newCategory.save();
-    return res.status(201).json(newCategory);
+    const categories = await WorkshopCategory.find();
+    return res.status(201).json(categories);
   } catch (err) {
     console.log(err);
 
+    return res
+      .status(500)
+      .json({ error: "Server error", message: err.message });
+  }
+};
+
+exports.updateWorksopCategoryName = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { category } = req.body;
+    const categoryExists = await WorkshopCategory.findById(id);
+    if (!categoryExists) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    categoryExists.categoryName = category;
+    await categoryExists.save();
+    return res.status(200).json(categoryExists);
+  } catch (err) {
     return res
       .status(500)
       .json({ error: "Server error", message: err.message });
@@ -58,6 +77,8 @@ exports.deleteWorkshopCategory = async (req, res) => {
 exports.addWorkshop = async (req, res) => {
   try {
     const { title, categoryId, shortDec, longDec } = req.body;
+
+    console.log(req.body);
 
     const category = await WorkshopCategory.findById(categoryId);
     if (!category) {
@@ -126,27 +147,35 @@ exports.updateWorkshop = async (req, res) => {
     const { id } = req.params;
     const { title, categoryId, shortDec, longDec } = req.body;
 
-    console.log(categoryId);
+    console.log(title, categoryId, shortDec, longDec);
 
+    //! find the category first to change
     const category = await WorkshopCategory.findById(categoryId); // Find the category by ID
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
     } else {
+      //^ find the workshop
       const wks = await workshop.findById(id);
       if (!wks) {
         return res.status(404).json({ error: "Workshop not found" });
       }
-      // change the category
+      //^ change the category
       if (wks.WorkshopCategory.toString() !== categoryId) {
+        //& Fetch the previous cateogory
         const prevCate = await WorkshopCategory.findById(wks.WorkshopCategory);
+        //& Fetch the new category
         const currentCate = await WorkshopCategory.findById(categoryId);
+        //& change the category
         wks.WorkshopCategory = categoryId;
+        //& remove the workshop from the previous category
         if (prevCate) {
           // update the prev category
           prevCate.workShops.pull(wks._id);
           await prevCate.save();
         }
+        //& add the workshop to the new category
         currentCate.workShops.push(wks._id);
+        //& save the new category
         await currentCate.save();
       }
 
