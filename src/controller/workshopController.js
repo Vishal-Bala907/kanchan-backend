@@ -77,9 +77,6 @@ exports.deleteWorkshopCategory = async (req, res) => {
 exports.addWorkshop = async (req, res) => {
   try {
     const { title, categoryId, shortDec, longDec } = req.body;
-
-    console.log(req.body);
-
     const category = await WorkshopCategory.findById(categoryId);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
@@ -147,8 +144,6 @@ exports.updateWorkshop = async (req, res) => {
     const { id } = req.params;
     const { title, categoryId, shortDec, longDec } = req.body;
 
-    console.log(title, categoryId, shortDec, longDec);
-
     //! find the category first to change
     const category = await WorkshopCategory.findById(categoryId); // Find the category by ID
     if (!category) {
@@ -214,7 +209,6 @@ exports.deleteWorkshop = async (req, res) => {
     // Remove image file if it exists
     if (exists.image) {
       const imagePath = path.join(__dirname, "../..", exists.image);
-      console.log(imagePath);
 
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the file
@@ -250,7 +244,6 @@ exports.updateWorkshopImage = async (req, res) => {
     // ✅ Remove previous image if exists
     if (exists.image) {
       const imagePath = path.join(__dirname, "../..", exists.image);
-      console.log(imagePath);
 
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the file

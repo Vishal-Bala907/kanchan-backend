@@ -10,8 +10,6 @@ const hashPassword = (password) => {
         if (err) {
           reject(err);
         }
-        console.log("password hashed", hash);
-
         resolve(hash);
       });
     });

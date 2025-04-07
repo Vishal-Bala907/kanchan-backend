@@ -13,16 +13,11 @@ const razorpay = new Razorpay({
 exports.createPayment = async (req, res) => {
   try {
     const { amount, currency } = req.body;
-    // console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
-    // console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET);
-    // Check if required parameters exist
     if (!amount || !currency) {
       return res
         .status(400)
         .json({ error: "Amount and currency are required" });
     }
-
-    console.log("Creating order:", { amount, currency });
 
     const options = {
       amount: amount, // Convert to paisa (INR 1 = 100 paisa)
@@ -82,11 +77,9 @@ exports.verifyPayment = async (req, res) => {
           userId,
           courseId,
         });
-        // console.log("amount " + amount);
 
         await payment.save();
 
-        console.log("Payment verified for course:", course.title);
         res.json({ success: true, message: "Payment Verified Successfully" });
       } catch (err) {
         console.error("Error updating course/payment:", err);

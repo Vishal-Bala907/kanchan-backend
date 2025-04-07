@@ -59,7 +59,6 @@ router.get("/all/course", async (req, res) => {
 // GET Route:
 router.get("/course/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   try {
     const courses = await Course.findById(id).populate({

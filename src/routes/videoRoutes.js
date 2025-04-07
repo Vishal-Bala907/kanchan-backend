@@ -46,6 +46,3 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-// const PORT = 3000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

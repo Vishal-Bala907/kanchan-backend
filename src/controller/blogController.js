@@ -36,8 +36,6 @@ exports.createBlog = async (req, res) => {
 
 exports.getLatestBlog = async (req, res) => {
   const { id } = req.params;
-  // console.log(id);
-
   try {
     let latestBlog = null;
     if (id === "new") {

@@ -7,8 +7,6 @@ const router = express.Router();
 // POST: Create a new booking
 router.post("/book-event", async (req, res) => {
   const { name, email, phone, eventDate, guests, specialRequests } = req.body;
-  console.log(req.body);
-
   if (!name || !email || !phone || !eventDate || !guests) {
     return res
       .status(400)
