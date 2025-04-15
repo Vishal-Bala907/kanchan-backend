@@ -52,7 +52,8 @@ exports.loginController = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user || (await comparePassword(user.password, password))) {
+
+    if (!user || !(await comparePassword(password, user.password))) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
     const token = jwt.sign(
